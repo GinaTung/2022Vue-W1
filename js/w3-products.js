@@ -30,7 +30,7 @@ const app = createApp({
     },
     // 建立產品按鈕點選後會打開modal
     openModal(status, product) {
-      productModal.show();
+      //productModal.show();
       console.log(status);
       if (status === "create") {
         productModal.show();
@@ -39,11 +39,16 @@ const app = createApp({
         this.tempProduct = {
           imagesUrl: [],
         };
-      } else {
+      } else if (status === "edit") {
         productModal.show();
         this.isNew = false;
         // 會帶入當前要編輯資料
-        this.tempProduct = { ...product };
+        // 加入imagesUrl: [],會顯示"新增圖片"按鈕可切換"刪除按鈕"圖片
+        this.tempProduct = { imagesUrl: [], ...product };
+        // 67分沒有array時更深層判斷??
+      } else if (status === "delete") {
+        delProductModal.show();
+        this.tempProduct = { ...product }; //等等取id使用
       }
     },
     // 打開modal，輸入新增產品資訊，按儲存後關閉視窗
@@ -67,6 +72,18 @@ const app = createApp({
           console.log(err);
         });
     },
+    deleteProduct() {
+      const url = `${site}/api/${api_path}/admin/product/${this.tempProduct.id}`;
+      axios
+        .delete(url)
+        .then(() => {
+          this.getProducts();
+          delProductModal.hide(); //關閉modal
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
   mounted() {
     const cookieValue = document.cookie
@@ -84,6 +101,7 @@ const app = createApp({
     //2.呼叫方法.show .hide
     productModal = new bootstrap.Modal("#productModal");
     //productModal.show(); //確保他會動
+    delProductModal = new bootstrap.Modal("#delProductModal");
   },
 });
 app.mount("#app");
