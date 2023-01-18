@@ -18,6 +18,9 @@
                 <button class="btn btn-primary" @click="openModal('create')">
                     建立新的產品
                 </button>
+                <button type="button" class="btn w-10 btn-info " v-on:click="tempProduct=item">
+                    <a href="index.html" class="text-light " style="text-decoration:none;">回首頁</a>
+                </button>
             </div>
             <table class="table mt-4">
                 <thead>
@@ -44,10 +47,10 @@
                     <tr v-for="product in products" :key="product.id">
                         <td>{{product.category}}</td>
                         <td>{{product.title}}</td>
-                        <td class="text-end"></td>
-                        <td class="text-end"></td>
+                        <td class="">{{product.origin_price}}</td>
+                        <td class="">{{product.price}}</td>
                         <td>
-                            <span class="text-success" v-if="product.is_enabled">啟用</span>
+                            <span class=" text-success" v-if="product.is_enabled">啟用</span>
                             <span v-else>未啟用</span>
                         </td>
                         <td>
@@ -56,7 +59,8 @@
                                     @click="openModal('edit',product)">
                                     編輯
                                 </button>
-                                <button type="button" class="btn btn-outline-danger btn-sm">
+                                <button type="button" class="btn btn-outline-danger btn-sm"
+                                    @click="openModal('delete',product)">
                                     刪除
                                 </button>
                             </div>
@@ -100,6 +104,7 @@
                                         </template>
                                         <!-- 判斷新增、刪除出現的時機 -->
                                         <!-- if新增:欄位是有填寫資料時或當如果是空的時候 -->
+                                        <!-- 沒有資料時就新增，有資料時則可刪除 -->
                                         <button class="btn btn-outline-primary btn-sm d-block w-100"
                                             v-if="!tempProduct.imagesUrl.length || tempProduct.imagesUrl[tempProduct.imagesUrl.length-1]"
                                             @click="tempProduct.imagesUrl.push('')">
@@ -192,13 +197,13 @@
                     </div>
                     <div class="modal-body">
                         是否刪除
-                        <strong class="text-danger"></strong> 商品(刪除後將無法恢復)。
+                        <strong class="text-danger">{{tempProduct.title}}</strong> 商品(刪除後將無法恢復)。
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                             取消
                         </button>
-                        <button type="button" class="btn btn-danger">
+                        <button type="button" class="btn btn-danger" @click="deleteProduct">
                             確認刪除
                         </button>
                     </div>
