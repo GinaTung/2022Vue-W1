@@ -29,8 +29,9 @@ const app = createApp({
         })
         .catch((err) => {
           // console.log(err);
-          alert(err.data.message);
-          window.location = "../login.html";
+          console.log(err);
+          alert(`${err.data.message}`);
+          window.location = "login.html";
         });
     },
     getProducts() {
