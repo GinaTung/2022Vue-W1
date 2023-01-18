@@ -25,13 +25,14 @@ const app = createApp({
           this.products = res.data.products;
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err.data.message);
         });
     },
     // 建立產品按鈕點選後會打開modal
     openModal(status, product) {
       //productModal.show();
       console.log(status);
+
       if (status === "create") {
         productModal.show();
         this.isNew = true;
@@ -69,7 +70,8 @@ const app = createApp({
           productModal.hide();
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err.data.message);
+          alert(`${err.data.message}，必填欄位請填寫資料`);
         });
     },
     deleteProduct() {
